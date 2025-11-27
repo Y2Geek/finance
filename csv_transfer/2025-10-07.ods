@@ -1,0 +1,121 @@
+Day,Date,Name,In,Out,Done,Notes
+
+Tuesday,07/10/2025,UC,1424.61,,X,
+Tuesday,07/10/2025,Ariel,,20.0,X,
+Tuesday,07/10/2025,Capital One,,27.0,X,
+Tuesday,07/10/2025,GoHenry (Niko),,20.0,X,
+Tuesday,07/10/2025,o2 (Device),,11.09,X,
+Tuesday,07/10/2025,o2 (Niko),,49.23,X,
+Tuesday,07/10/2025,Uber (Eats),,25.0,X,
+Tuesday,07/10/2025,Uber (Mobility),,75.0,X,
+Tuesday,07/10/2025,Vanquis,=e11,21.25,,
+Tuesday,07/10/2025,Vanquis,=e12,15.94,,
+Tuesday,07/10/2025,Vanquis-(Complete),,=sum(d11:d12),X,
+,,,,,=sum(d3:d13)-sum(e3:e13),1160.1
+Wednesday,08/10/2025,ASDA (Delivery Pass),,6.95,X,
+,,,,,=sum(d3:d15)-sum(e3:e15),1153.15
+Thursday,09/10/2025,Amazon (Pandy),,15.0,X,
+Thursday,09/10/2025,Energy,,150.0,X,
+Thursday,09/10/2025,Energy (Card),,50.0,X,
+,,,,,=sum(d3:d19)-sum(e3:e19),938.15
+Friday,10/10/2025,Sam (Topup),5.0,,X,
+Friday,10/10/2025,Amazon,,20.0,X,
+Friday,10/10/2025,Capital One,,22.50,X,
+Friday,10/10/2025,Council Tax,,27.0,X,
+Friday,10/10/2025,GoHenry (Niko School),,5.0,X,
+Friday,10/10/2025,Ocean,,18.75,X,
+Friday,10/10/2025,Paramount+,,7.99,X,
+Friday,10/10/2025,Shopping,,70.0,X,
+Friday,10/10/2025,Water,,37.0,X,
+,,,,,=sum(d3:d29)-sum(e3:e29),734.91
+Saturday,11/10/2025,GoHenry (Monthly Fee),,5.99,X,
+Saturday,11/10/2025,Sam,,5.0,X,
+,,,,,=sum(d3:d32)-sum(e3:e32),723.92
+Tuesday,14/10/2025,Ring,,4.99,X,
+,,,,,=sum(d3:d34)-sum(e3:e34),718.93
+Wednesday,15/10/2025,Sam TalkTalk,,30.95,X,
+,,,,,=sum(d3:d36)-sum(e3:e36),687.98
+Thursday,16/10/2025,Vanquis,,15.94,X,
+,,,,,=sum(d3:d38)-sum(e3:e38),672.04
+Friday,17/10/2025,Sam (Topup),5.0,,X,
+Friday,17/10/2025,Amazon,=e41,20.0,,
+Friday,17/10/2025,Amazon (Coffee),=e42,7.0,,
+Friday,17/10/2025,Amazon-(Complete),,=sum(d41:d42),X,
+Friday,17/10/2025,Capital One,,22.50,X,
+Friday,17/10/2025,GoHenry (Niko School),,5.0,X,
+Friday,17/10/2025,Link Finance,,30.0,X,
+Friday,17/10/2025,Ocean,,18.75,X,
+Friday,17/10/2025,Shopping,,70.0,X,
+,,,,,=sum(d3:d48)-sum(e3:e48),503.79
+Saturday,18/10/2025,Dropbox,,9.99,X,
+Saturday,18/10/2025,Sam,,5.0,X,
+Saturday,18/10/2025,YouTube (EC),,1.99,X,
+,,,,,=sum(d3:d52)-sum(e3:e52),486.81
+Monday,20/10/2025,EE,=e54,9.0,,
+Monday,20/10/2025,EE (Second),=e55,9.0,,
+Monday,20/10/2025,EE-(Complete),,=sum(d54:d55),X,
+,,,,,=sum(d3:d56)-sum(e3:e56),468.81
+Tuesday,21/10/2025,Netflix (Sam),,12.99,X,
+Tuesday,21/10/2025,Sleep SoundS (Amazon),,2.40,X,
+,,,,,=sum(d3:d59)-sum(e3:e59),453.42
+Wednesday,22/10/2025,TV Licence,,7.47,X,
+,,,,,=sum(d3:d61)-sum(e3:e61),445.95
+Thursday,23/10/2025,James (YouTube),5.0,,X,
+Thursday,23/10/2025,Amazon (Pandy),,15.0,X,
+Thursday,23/10/2025,Vanquis,,15.94,X,
+,,,,,=sum(d3:d65)-sum(e3:e65),420.01
+Friday,24/10/2025,Amazon,,20.0,X,
+Friday,24/10/2025,Capital One,,22.50,X,
+Friday,24/10/2025,GoHenry (Niko School),,5.0,X,
+Friday,24/10/2025,Ocean,,18.75,X,
+Friday,24/10/2025,Shopping,,70.0,X,
+,,,,,=sum(d3:d71)-sum(e3:e71),283.76
+Saturday,25/10/2025,Sam,,5.0,X,
+,,,,,=sum(d3:d73)-sum(e3:e73),278.76
+Monday,27/10/2025,Sam (Topup),5.0,=d75,,
+Monday,27/10/2025,Sam (Uber One),4.99,=d76,,
+Monday,27/10/2025,Sam-(Complete),=sum(d75:d76),,X,
+,,,,,=sum(d3:d77)-sum(e3:e77),288.75
+Tuesday,28/10/2025,Virgin Media,,79.57,X,
+,,,,,=sum(d3:d79)-sum(e3:e79),209.18
+Wednesday,29/10/2025,Prime,,8.99,X,
+,,,,,=sum(d3:d81)-sum(e3:e81),200.19
+Thursday,30/10/2025,Capital One (Sam Uber One),,4.99,X,
+Thursday,30/10/2025,Vanquis,,15.94,X,
+,,,,,=sum(d3:d84)-sum(e3:e84),179.26
+Friday,31/10/2025,PIP,749.80,,X,
+Friday,31/10/2025,Amazon,=e87,20.0,,
+Friday,31/10/2025,Amazon (Coffee),=e88,7.0,,
+Friday,31/10/2025,Amazon (Dishwasher stuff),=e89,15.0,,
+Friday,31/10/2025,Amazon (Liners),=e90,10.0,,
+Friday,31/10/2025,Amazon-(Complete),,=sum(d87:d90),X,
+Friday,31/10/2025,BNPL,=e92,135.0,,
+Friday,31/10/2025,BNPL (September Missed),=e93,45.0,,
+Friday,31/10/2025,BNPL (Very),=e94,24.0,,
+Friday,31/10/2025,BNPL (Very),=e95,45.0,,
+Friday,31/10/2025,BNPL-(Complete),,=sum(d92:d95),X,
+Friday,31/10/2025,Capital One,,22.50,X,
+Friday,31/10/2025,GoHenry (Niko School),=e98,5.0,,
+Friday,31/10/2025,GoHenry (Niko),=e99,80.0,,
+Friday,31/10/2025,GoHenry-(Complete),,=sum(d98:d99),X,
+Friday,31/10/2025,Littlewoods,,300.00,X,
+Friday,31/10/2025,Littlewoods (Card),,0.0,X,
+Friday,31/10/2025,Mum,,200.0,X,
+Friday,31/10/2025,Ocean,,18.75,X,
+Friday,31/10/2025,Shopping,,70.0,X,
+,,,,,=sum(d3:d105)-sum(e3:e105),-68.19
+Saturday,01/11/2025,Interest (Virgin Money),0.0,,X,
+Saturday,01/11/2025,Sam,,5.0,X,
+,,,,,=sum(d3:d108)-sum(e3:e108),-73.19
+Sunday,02/11/2025,Very,,31.34,X,
+Sunday,02/11/2025,YouTube Premium (Family),,19.99,X,
+,,,,,=sum(d3:d111)-sum(e3:e111),-124.52
+Monday,03/11/2025,Sam (Topup),5.0,,X,
+Monday,03/11/2025,Dropbox (Sam),,9.99,X,
+,,,,,=sum(d3:d114)-sum(e3:e114),-129.51
+Wednesday,05/11/2025,Sam Topup,,20.0,X,
+,,,,,=sum(d3:d116)-sum(e3:e116),-149.51
+Thursday,06/11/2025,Amazon (Pandy),,15.0,X,
+Thursday,06/11/2025,Vanquis,,15.94,X,
+Thursday,06/11/2025,Savings,,"=if(sum(d3:d119)-sum(e3:e119) < 0.00, "" "", sum(d3:d119)-sum(e3:e119))",X,
+,,,,,=sum(d3:d120)-sum(e3:e120),-180.45
