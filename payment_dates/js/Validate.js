@@ -105,6 +105,7 @@ function validValue(value) {
 function validFrequency(frequency) {
     switch(frequency) {
         case 'WEEKLY':
+        case 'WEEKDAYS':
         case 'FORTNIGHTLY':
         case 'FOURWEEKLY':
         case '30-DAYS':

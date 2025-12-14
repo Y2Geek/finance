@@ -7,14 +7,14 @@ class Payment():
         self.name = name
         self.value = value
     def __lt__(self, other):
-        if self.get_date() < other.get_date():
-            return True
-        return False
+        return self.get_date() < other.get_date()
     def get_type(self):
         """ Returns the type Credit/Denot """
         return self.type
     def get_date(self):
         return self.date
+    def get_name(self):
+        return self.name
     def get_value(self):
         """ Returns the value of a payment """
         return self.value

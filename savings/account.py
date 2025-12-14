@@ -28,12 +28,11 @@ class Account():
         return total
     def get_all_payments(self):
         """ Returns both credits and debits """
-        all = []
+        all = self.credits + self.debits
+        #all.sort()
 
-        for pay in self.credits:
-            all.append(pay.to_string())
-        
-        for pay in self.debits:
-            all.append(pay.to_string())
-        
-        return all
+        all_strings = []
+
+        for pay in sorted(all):
+            all_strings.append(pay.to_string())
+        return all_strings

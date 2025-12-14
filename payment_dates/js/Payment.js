@@ -88,6 +88,16 @@ class OngoingPayment extends Payment {
             case 'WEEKLY':
                 this._date = addWeeks(this._date, 1);
                 break;
+            case 'WEEKDAYS':
+                this._date = addDays(this._date, 1);
+                if (this._date.getDay() == 6) {
+                    // Move away from Saturday
+                    this._date = addDays(this._date, 2);
+                } else if (this._date.getDay() == 0) {
+                    // Move away from Sunday
+                    this._date = addDays(this._date, 1);
+                }
+                break;
             case 'FORTNIGHTLY':
                 this._date = addWeeks(this._date, 2);
                 break;
@@ -108,7 +118,9 @@ class OngoingPayment extends Payment {
                 break;
             case 'YEARLY':
                 this._date = addYears(this._date, 1);
-                break;
+                break
+            default:
+                console.log('Broken');
         }
     }
     moveOffWeekend() {

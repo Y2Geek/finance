@@ -28,11 +28,6 @@ def get_payments(account):
         else:
             print(line)
 
-def get_sub_account(acc):
-    """ Returns the name after the closing bracket"""
-    return acc.get_name()[acc.get_name().index(')') + 2:]
-
-
 def create_payment(data = ''):
     """ Gets data from user to create payment object """
     if not data:
@@ -69,10 +64,10 @@ def add_to_account(account, payment):
     write_list_to_file(f'{dir}{account.get_name()}.txt', account.get_all_payments())
 
 def list_accounts():
-    print(f'\n\t{'Index':^10}{'Name':^30}{'Balance':^10}\n')
+    print(f'\n\t{'Index':^10}{'Name':^10}{'Balance':^10}')
     i = 0
     for acc in accounts:
-        print(f'\t{i:^10}{acc.get_name():<30}{acc.get_balance():>10}')
+        print(f'\t{i:^10}{acc.get_name():<10}{acc.get_balance():>10}')
         i += 1
     print('\n')
 
@@ -81,21 +76,7 @@ def add_multi_accounts(indexes, payment):
     indexes = indexes.split(' ')
 
     for i in indexes:
-        acc = accounts[int(i)]
-        parant = acc.get_name()[:acc.get_name().index(')') + 1]
-        parant_index = ''
-
-        index = 0
-        for a in accounts:
-            if a.get_name() == parant:
-                parant_index = index
-            index += 1
-
         add_to_account(accounts[int(i)], payment)
-        
-        # If index is not the same as parent add to parent too 
-        if int(i) != parant_index:
-            add_to_account(accounts[parant_index], Payment(payment.get_type(), payment.get_date(), f'{payment.get_name()} ({get_sub_account(acc)})', payment.get_value()))
 
 
 get_accounts()
@@ -105,9 +86,8 @@ while not done:
     print(
         '\t0) Add Payment\n' +
         '\t1) Xmas\n' +
-        '\t2) Transfer\n' +
-        '\t3) View Balances\n' +
-        '\t4) Exit'
+        '\t2) View Balances\n' +
+        '\t3) Exit'
     )
     option = input('Option: ')
 
@@ -119,47 +99,12 @@ while not done:
 
     elif option == '1':
         pay = create_payment()
-        # Christmas is double the amount
-        double = Payment(pay.get_type(), pay.get_date(), 'Weekly Credit (Christmas)', pay.get_value() * 2)
-        
-        # Find relavent accounts
-        accs = []
-        christmas_index = ''
-        
-        index = 0
-        for acc in accounts:
-            acc = acc.get_name()
-            if 'Christmas' in acc:
-                christmas_index = index
-            elif 'Xmas' in acc:
-                accs.append(index)
-            
-            index += 1
-        
-        tmp = ''
-        for acc in accs:
-            tmp += str(acc) + ' '
+        accs = '5 4 6 4 7 4'
+        add_multi_accounts(accs, pay)
 
-        add_multi_accounts(f'{christmas_index}', double)
-        add_multi_accounts(tmp.strip(), pay)
     elif option == '2':
         list_accounts()
-        acc1 = input('Which account are we transfering from? ')
-        list_accounts()
-        acc2 = input('Which account are we transfering to? ')
-
-        if acc1 != acc2:
-            date = input('Date: ')
-            name = input('Name for transfer: ')
-            amount = input('Value: ')
-            amount = float(amount)
-            amount = int(amount * 100)
-
-            add_multi_accounts(acc1, Payment('Debit', date, f'{name} ({get_sub_account(accounts[int(acc2)])})', amount))
-            add_multi_accounts(acc2, Payment('Credit', date, f'{name} ({get_sub_account(accounts[int(acc1)])})', amount))
     elif option == '3':
-        list_accounts()
-    elif option == '4':
         done = True
     else:
         print('Invalid option')
