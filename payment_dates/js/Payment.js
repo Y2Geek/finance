@@ -74,20 +74,18 @@ class OngoingPayment extends Payment {
 
         // Make sure day of month matches or the date is set to end of month
         switch(this._frequency) {
-            case 'MONTHLY':
-            case 'QUARTERLY':
-            case 'HALF-YEARLY':
-            case 'YEARLY':
+            case 'MONTHS':
+            case 'YEARS':
+            
                 if(this._date.getDate() != dayOfMonth) {
                     this._date = setDateOfMonth(this._date, dayOfMonth);
                 }
         }
     }
     moveDateAhead() {
-        switch(this._frequency) {
-            case 'WEEKLY':
-                this._date = addWeeks(this._date, 1);
-                break;
+        freq = this._frequency.split('=')
+        freq[1] = parseInt(freq[1])
+        switch(freq[0]) {
             case 'WEEKDAYS':
                 this._date = addDays(this._date, 1);
                 if (this._date.getDay() == 6) {
@@ -98,29 +96,20 @@ class OngoingPayment extends Payment {
                     this._date = addDays(this._date, 1);
                 }
                 break;
-            case 'FORTNIGHTLY':
-                this._date = addWeeks(this._date, 2);
+            case 'DAYS':
+                this._date = addDays(this._date, freq[1]);
                 break;
-            case 'FOURWEEKLY':
-                this._date = addWeeks(this._date, 4);
+            case 'WEEKS':
+                this._date = addWeeks(this._date, freq[1]);
                 break;
-            case '30-DAYS':
-                this._date = addDays(this._date, 30);
+            case 'MONTHS':
+                this._date = addMonths(this._date, freq[1]);
                 break;
-            case 'MONTHLY':
-                this._date = addMonths(this._date, 1);
-                break;
-            case 'QUARTERLY':
-                this._date = addMonths(this._date, 3);
-                break;
-            case 'HALF-YEARLY':
-                this._date = addMonths(this._date, 6);
-                break;
-            case 'YEARLY':
-                this._date = addYears(this._date, 1);
+            case 'YEARS':
+                this._date = addYears(this._date, freq[1]);
                 break
             default:
-                console.log('Broken');
+                console.log('Broken: ' + freq);
         }
     }
     moveOffWeekend() {
@@ -179,7 +168,7 @@ class UCPayment extends OngoingPayment {
     _option;
 
     constructor(type, date, name, value, option) {
-        super(type, date, name, value, 'MONTHLY', false);
+        super(type, date, name, value, 'MONTHS=1', false);
         this._option = option;
     }
     get option() {

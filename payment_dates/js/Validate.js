@@ -103,22 +103,30 @@ function validValue(value) {
  * @returns Boolean
  */
 function validFrequency(frequency) {
-    switch(frequency) {
-        case 'WEEKLY':
+    freq = frequency.split('=')
+    switch(freq[0]) {
         case 'WEEKDAYS':
-        case 'FORTNIGHTLY':
-        case 'FOURWEEKLY':
-        case '30-DAYS':
-        case 'MONTHLY':
-        case 'QUARTERLY':
-        case 'HALF-YEARLY':
-        case 'YEARLY':
-            return true;
+        case 'WEEK':
+        case 'FORTNIGHT':
+        case 'MONTH':
+            return true
         default:
-            return false;
-    }
-}
+            switch(freq[0]) {
+                case 'DAYS':
+                case 'WEEKS':
+                case 'MONTHS':
+                case 'YEARS':
+                    if(freq[1].isNaN) {
+                        return false
+                    } else {
+                        return true
+                    }
+            }
 
+            // Return false as never caught
+            return false
+        }
+}
 
 /**
  * Checks that UC Option is valid
