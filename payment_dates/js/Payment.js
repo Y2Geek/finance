@@ -83,7 +83,7 @@ class OngoingPayment extends Payment {
         }
     }
     moveDateAhead() {
-        freq = this._frequency.split('=')
+        let freq = this._frequency.split('=')
         switch(freq[0]) {
             case 'PENNY-CHALLENGE':
                 this._date = addDays(this._date, 1);
@@ -261,7 +261,8 @@ class UCPayment extends OngoingPayment {
 
             this.moveDateAhead();
             // Put date back to correct day of month
-            this.date.setDate(dayOfMonth);
+            this.date = setDateOfMonth(this.date, dayOfMonth)
+            //this.date.setDate(dayOfMonth);
 
         } while(this._date < date[1]);
         
