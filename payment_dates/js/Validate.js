@@ -105,6 +105,7 @@ function validValue(value) {
 function validFrequency(frequency) {
     freq = frequency.split('=')
     switch(freq[0]) {
+        case 'PENNY-CHALLENGE':
         case 'WEEKDAYS':
         case 'WEEK':
         case 'FORTNIGHT':

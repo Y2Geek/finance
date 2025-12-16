@@ -29,10 +29,10 @@ class Payment {
         this._name = name;
     }
     get value() {
-        return this._value;
+        return parseFloat(this._value);
     }
     set value(value) {
-        this._value = value;
+        this._value = parseFloat(value);
     }
     toString() {
         let date = `${this._date.getFullYear()}-${this._date.getMonth() + 1}-${this._date.getDate()}`;
@@ -86,6 +86,10 @@ class OngoingPayment extends Payment {
         freq = this._frequency.split('=')
         freq[1] = parseInt(freq[1])
         switch(freq[0]) {
+            case 'PENNY-CHALLENGE':
+                this._date = addDays(this._date, 1);
+                this.value = (this.value + 0.01).toFixed(2);
+                break;
             case 'WEEKDAYS':
                 this._date = addDays(this._date, 1);
                 if (this._date.getDay() == 6) {
