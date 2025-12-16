@@ -111,6 +111,14 @@ function validFrequency(frequency) {
         case 'FORTNIGHT':
         case 'MONTH':
             return true
+        case 'LAST':
+            days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            for(day of days) {
+                if(freq[1] == day) {
+                    return true
+                }
+            }
+            return false;
         default:
             switch(freq[0]) {
                 case 'DAYS':

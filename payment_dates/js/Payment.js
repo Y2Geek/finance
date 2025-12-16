@@ -84,11 +84,36 @@ class OngoingPayment extends Payment {
     }
     moveDateAhead() {
         freq = this._frequency.split('=')
-        freq[1] = parseInt(freq[1])
         switch(freq[0]) {
             case 'PENNY-CHALLENGE':
                 this._date = addDays(this._date, 1);
                 this.value = (this.value + 0.01).toFixed(2);
+                break;
+            case 'LAST':
+                let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+                // Get last day of next month
+                let tmpDate = addMonths(this._date, 1)
+                tmpDate = setDateOfMonth(tmpDate, 31)
+                console.log(tmpDate)
+
+                // Now compare days to see if they match
+                let freq_day = days.indexOf(freq[1])
+                console.log(freq[1])
+                console.log(freq_day)
+                let tmp_day = tmpDate.getDay()
+                console.log(tmp_day)
+
+                if (freq_day == tmp_day) {
+                    this.date = tmpDate
+                } else {
+                    let days_to_remove = tmp_day - freq_day
+                    if(days_to_remove > 0) {
+                        this.date = minusDays(tmpDate, days_to_remove)
+                    } else {
+                        this.date = minusDays(tmpDate, Math.abs(days_to_remove) + 7)
+                    }
+                }
                 break;
             case 'WEEKDAYS':
                 this._date = addDays(this._date, 1);
@@ -100,20 +125,24 @@ class OngoingPayment extends Payment {
                     this._date = addDays(this._date, 1);
                 }
                 break;
-            case 'DAYS':
-                this._date = addDays(this._date, freq[1]);
-                break;
-            case 'WEEKS':
-                this._date = addWeeks(this._date, freq[1]);
-                break;
-            case 'MONTHS':
-                this._date = addMonths(this._date, freq[1]);
-                break;
-            case 'YEARS':
-                this._date = addYears(this._date, freq[1]);
-                break
             default:
-                console.log('Broken: ' + freq);
+                freq[1] = parseInt(freq[1])
+                switch(freq[0]) {
+                case 'DAYS':
+                    this._date = addDays(this._date, freq[1]);
+                    break;
+                case 'WEEKS':
+                    this._date = addWeeks(this._date, freq[1]);
+                    break;
+                case 'MONTHS':
+                    this._date = addMonths(this._date, freq[1]);
+                    break;
+                case 'YEARS':
+                    this._date = addYears(this._date, freq[1]);
+                    break
+                default:
+                    console.log('Broken: ' + freq);
+                }
         }
     }
     moveOffWeekend() {
