@@ -154,15 +154,21 @@ function setDateOfMonth(date, dayOfMonth) {
         case 6:
         case 9:
         case 11:
-            if(dayOfMonth > 29) {
-                tmpDate.setDate(30);
-                return tmpDate;
-            } else if(dayOfMonth == 29) {
-                tmpDate.setDate(29);
-                return tmpDate;
+            if(dayOfMonth <= 30) {
+                tmpDate.setDate(dayOfMonth)
+                return tmpDate
+            } else {
+                tmpDate.setDate(30)
+                return tmpDate
             }
-            break;
         default:
+            if(tmpDate.getFullYear % 4 != 0) {
+                tmpDate.setDate(28)
+                return tmpDate
+            } else {
+                tmpDate.setDate(29)
+                return tmpDate
+            }
             return tmpDate;
     }
 }
