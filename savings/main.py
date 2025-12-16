@@ -1,6 +1,7 @@
 from account import Account
 from payment import Payment
 from fileio import read_contents, write_list_to_file
+from datetime import date
 from os import listdir
 
 accounts = []
@@ -27,6 +28,7 @@ def get_payments(account):
             account.add_payment(pay)
         else:
             print(line)
+
 
 def get_sub_account(acc):
     """ Returns the name after the closing bracket"""
@@ -63,10 +65,12 @@ def create_payment(data = ''):
 
     return Payment(data[0], data[1], data[2], int(data[3]))
 
+
 def add_to_account(account, payment):
     """ Adds given payment to given account """
     account.add_payment(payment)
     write_list_to_file(f'{dir}{account.get_name()}.txt', account.get_all_payments())
+
 
 def list_accounts():
     print(f'\n\t{'Index':^10}{'Name':^30}{'Balance':^10}\n')
@@ -75,6 +79,7 @@ def list_accounts():
         print(f'\t{i:^10}{acc.get_name():<30}{acc.get_balance():>10}')
         i += 1
     print('\n')
+
 
 def add_multi_accounts(indexes, payment):
     """ Adds the given payment to each account at given index """
@@ -104,10 +109,11 @@ while not done:
     # Give user optoins:
     print(
         '\t0) Add Payment\n' +
-        '\t1) Xmas\n' +
-        '\t2) Transfer\n' +
-        '\t3) View Balances\n' +
-        '\t4) Exit'
+        '\t1) Penny Challenge\n' # 
+        '\t2) Xmas\n' +
+        '\t3) Transfer\n' +
+        '\t4) View Balances\n' +
+        '\t5) Exit'
     )
     option = input('Option: ')
 
@@ -116,8 +122,17 @@ while not done:
         list_accounts()
         accs = input('Which accounts would you like to add this payment to? ')
         add_multi_accounts(accs, pay)
-
     elif option == '1':
+        i = 0
+        for acc in accounts:
+            if 'Penny' in acc.get_name():
+                d = date.today()
+                d = f'{d.year}-{d.month}-{d.day}'
+                value = input('\tValue: ')
+                pay = create_payment(['Credit', d, 'Credit', float(value) * 100])
+                add_multi_accounts(str(i), pay)
+            i += 1
+    elif option == '2':
         pay = create_payment()
         # Christmas is double the amount
         double = Payment(pay.get_type(), pay.get_date(), 'Weekly Credit (Christmas)', pay.get_value() * 2)
@@ -142,7 +157,7 @@ while not done:
 
         add_multi_accounts(f'{christmas_index}', double)
         add_multi_accounts(tmp.strip(), pay)
-    elif option == '2':
+    elif option == '3':
         list_accounts()
         acc1 = input('Which account are we transfering from? ')
         list_accounts()
@@ -157,9 +172,9 @@ while not done:
 
             add_multi_accounts(acc1, Payment('Debit', date, f'{name} ({get_sub_account(accounts[int(acc2)])})', amount))
             add_multi_accounts(acc2, Payment('Credit', date, f'{name} ({get_sub_account(accounts[int(acc1)])})', amount))
-    elif option == '3':
-        list_accounts()
     elif option == '4':
+        list_accounts()
+    elif option == '5':
         done = True
     else:
         print('Invalid option')
