@@ -22,14 +22,30 @@ function getFileContents(f) {
 function createPayment(data) {
     // Have data validated before creation
     if(validatePaymentData(data)) {
+        data[0] = data[0].toUpperCase()
+        
         switch(data.length) {
             case 4:
                 return new Payment(data[0], data[1], data[2], data[3]);
             case 5:
-                return new UCPayment(data[0], data[1], data[2], data[3], data[4]);
             case 6:
-                return new OngoingPayment(data[0], data[1], data[2], data[3], data[4], data[5]);
             case 7:
+                data[4] = data[4].toUpperCase()
+                
+                if(data.length == 5) {
+                    return new UCPayment(data[0], data[1], data[2], data[3], data[4]);
+                }
+                
+                if(data[5].toLowerCase() == 'true') {
+                    data[5] = true
+                } else {
+                    data[5] = false
+                }
+
+                if(data.length == 6) {
+                    return new OngoingPayment(data[0], data[1], data[2], data[3], data[4], data[5]);
+                }
+                
                 return new LimitedPayment(data[0], data[1], data[2], data[3], data[4], data[5], data[6]);
             default:
                 return;

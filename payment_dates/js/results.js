@@ -103,17 +103,6 @@ function getAllPayments(filecontents) {
                     case 5:
                     case 6:
                     case 7:
-                        // Set boolean for Direct Debit flag
-                        if(parts.length >= 6) {
-                            if(parts[5] == 'true') {
-                                parts[5] = true;
-                            } else if(parts[5] == 'false') {
-                                parts[5] = false;
-                            } else {
-                                console.log('Failed autoPayment');
-                            }
-                        }
-
                         let pay = createPayment(parts);
                         if(pay != undefined) {
                             allPayments.push(pay);

@@ -40,11 +40,12 @@ function validatePaymentData(data) {
  * @returns Boolean
  */
 function validType(type) {
-    switch(type) {
+    switch(type.toUpperCase()) {
         case 'IN':
         case 'OUT':
             return true;
         default:
+            console.log('Failed Type')
             return false;
     }
 }
@@ -59,6 +60,7 @@ function validDate(date) {
     let d = new Date(date);
 
     if(d == 'Invalid Date') {
+        console.log('Failed Date')
         return false;
     } else {
         return true;
@@ -93,6 +95,7 @@ function validValue(value) {
             return true;
         }
     }
+    console.log('Failed Value')
     return false;
 }
 
@@ -104,6 +107,8 @@ function validValue(value) {
  */
 function validFrequency(frequency) {
     freq = frequency.split('=')
+    freq[0] = freq[0].toUpperCase()
+
     switch(freq[0]) {
         case 'PENNY-CHALLENGE':
         case 'WEEKDAYS':
@@ -111,21 +116,26 @@ function validFrequency(frequency) {
         case 'FORTNIGHT':
         case 'MONTH':
             return true
-        case 'LAST':
-            days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-            for(day of days) {
-                if(freq[1] == day) {
-                    return true
-                }
-            }
-            return false;
         default:
+            freq[1] = freq[1].toUpperCase()
             switch(freq[0]) {
+                case 'LAST':
+                    days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY']
+                    for(day of days) {
+                        if(freq[1] == day) {
+                            return true
+                        }
+                    }
+                    if(freq[1] == 'Working-Day') {
+                        return true
+                    }
+                    return false;
                 case 'DAYS':
                 case 'WEEKS':
                 case 'MONTHS':
                 case 'YEARS':
                     if(freq[1].isNaN) {
+                        console.log('Failed Freq[1]')
                         return false
                     } else {
                         return true
@@ -133,6 +143,7 @@ function validFrequency(frequency) {
             }
 
             // Return false as never caught
+            console.log('Failed Freq')
             return false
         }
 }
@@ -143,12 +154,13 @@ function validFrequency(frequency) {
  * @returns Boolean
  */
 function validOption(opt) {
-    switch(opt) {
+    switch(opt.toUpperCase()) {
         case 'WEEK':
         case 'FORTNIGHT':
         case 'MONTH':
             return true;
         default:
+            console.log('Failed Option')
             return false;
     }
 }
@@ -160,11 +172,13 @@ function validOption(opt) {
  * @returns Boolean
  */
 function validBool(bool) {
+    bool = bool.toLowerCase()
     switch(bool) {
-        case true:
-        case false:
+        case 'true':
+        case 'false':
             return true;
         default:
+            console.log(`Failed Bool ${bool} ${typeof(bool)}`)
             return false;
     }
 }
