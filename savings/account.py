@@ -19,7 +19,7 @@ class Account():
         debit = self.get_total(self.debits)
         credit = self.get_total(self.credits)
 
-        return f'£{(credit - debit) / 100}'
+        return (credit - debit) / 100
     def get_total(self, ls):
         """ Returns the value of all payments in given list """
         total = 0

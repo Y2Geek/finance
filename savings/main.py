@@ -73,7 +73,7 @@ def add_to_account(account, payment):
 
 
 def list_accounts():
-    print(f'\n\t{'Index':^10}{'Name':^30}{'Balance':^10}\n')
+    print(f'\n\t{'Index':^10}{'Name':^30}{'Balance (£)':^10}\n')
     i = 0
     for acc in accounts:
         print(f'\t{i:^10}{acc.get_name():<30}{acc.get_balance():>10}')
@@ -174,6 +174,14 @@ while not done:
             add_multi_accounts(acc2, Payment('Credit', date, f'{name} ({get_sub_account(accounts[int(acc1)])})', amount))
     elif option == '4':
         list_accounts()
+        total_in_savings = 0.0
+
+        for acc in accounts:
+            acc_name = acc.get_name().split(')')
+            if acc_name[1] == '':
+                total_in_savings += float(acc.get_balance())
+            
+        print(f'\tIn total you have £{total_in_savings} in savings\n')
     elif option == '5':
         done = True
     else:
