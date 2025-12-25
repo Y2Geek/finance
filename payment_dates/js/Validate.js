@@ -117,10 +117,13 @@ function validFrequency(frequency) {
         case 'MONTH':
             return true
         default:
-            console.log(freq)
             if(freq.length == 2) {
                 freq[1] = freq[1].toUpperCase()
                 switch(freq[0]) {
+                    case 'FIRST':
+                    case 'SECOND':
+                    case 'THIRD':
+                    case 'FOURTH':
                     case 'LAST':
                         days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY']
                         for(day of days) {
@@ -128,7 +131,7 @@ function validFrequency(frequency) {
                                 return true
                             }
                         }
-                        if(freq[1] == 'Working-Day') {
+                        if(freq[1] == 'WORKING-DAY') {
                             return true
                         }
                         return false;

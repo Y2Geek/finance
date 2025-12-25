@@ -84,15 +84,68 @@ class OngoingPayment extends Payment {
     }
     moveDateAhead() {
         let freq = this._frequency.split('=')
+        const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+        let tmpDate = addMonths(this._date, 1)
+
         switch(freq[0]) {
             case 'PENNY-CHALLENGE':
                 this._date = addDays(this._date, 1);
                 this.value = (this.value + 0.01).toFixed(2);
                 break;
-            case 'LAST':
-                let tmpDate = addMonths(this._date, 1)    
+            case 'FIRST':
+            case 'SECOND':
+            case 'THIRD':
+            case 'FOURTH':
+                let start_at = 0
+
+                switch(freq[0]) {
+                    case 'FIRST':
+                        start_at = 1
+                        break;
+                    case 'SECOND':
+                        start_at = 8
+                        break;
+                    case 'THIRD':
+                        start_at = 15
+                        break;
+                    case 'FOURTH':
+                        start_at = 22
+                }
+
+                tmpDate = setDateOfMonth(tmpDate, start_at)
+
                 if(freq[1] == 'WORKING-DAY') {
-                    tmpDate = setDateOfMonth(tmpDate, 31)
+                    // Now set date to the last working day (Mon - Fri)
+                    if(tmpDate.getDay() == 0) {
+                        this.date = addDays(tmpDate, 1)
+                    } else if(tmpDate.getDay() == 6) {
+                        this.date = addDays(tmpDate, 2)
+                    } else {
+                        this.date = tmpDate
+                    }
+                } else {
+                    // Now compare days to see if they match
+                    let freq_day = days.indexOf(freq[1])
+                    let tmp_day = tmpDate.getDay()
+
+                    if (freq_day == tmp_day) {
+                        this.date = tmpDate
+                    } else {
+                        if(tmp_day < freq_day) {
+                            let days_to_add = freq_day - tmp_day
+                            this.date = addDays(tmpDate, days_to_add)
+                        } else {
+                            let days_to_add = (6 - tmp_day) + freq_day + 1
+                            // console.log(Math.abs(freq_day - tmp_day))
+                            this.date = addDays(tmpDate, Math.abs(days_to_add))
+                        }
+                    }
+                }
+                break;
+            case 'LAST':
+                tmpDate = setDateOfMonth(tmpDate, 31)
+
+                if(freq[1] == 'WORKING-DAY') {
                     // Now set date to the last working day (Mon - Fri)
                     if(tmpDate.getDay() == 0) {
                         this.date = minusDays(tmpDate, 2)
@@ -102,11 +155,6 @@ class OngoingPayment extends Payment {
                         this.date = tmpDate
                     }
                 } else {
-                    let days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
-
-                    // Get last day of next month
-                    tmpDate = setDateOfMonth(tmpDate, 31)
-
                     // Now compare days to see if they match
                     let freq_day = days.indexOf(freq[1])
                     let tmp_day = tmpDate.getDay()
@@ -114,10 +162,12 @@ class OngoingPayment extends Payment {
                     if (freq_day == tmp_day) {
                         this.date = tmpDate
                     } else {
-                        let days_to_remove = tmp_day - freq_day
                         if(tmp_day < freq_day) {
-                            this.date = minusDays(tmpDate, days_to_remove + 7)
+                            let days_to_remove = Math.abs(0 - tmp_day) + (6 - freq_day) + 1
+                            this.date = minusDays(tmpDate, days_to_remove)
                         } else {
+                            let days_to_remove = Math.abs(freq_day - tmp_day)
+                            // console.log(Math.abs(freq_day - tmp_day))
                             this.date = minusDays(tmpDate, Math.abs(days_to_remove))
                         }
                     }
