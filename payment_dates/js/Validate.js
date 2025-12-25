@@ -117,29 +117,32 @@ function validFrequency(frequency) {
         case 'MONTH':
             return true
         default:
-            freq[1] = freq[1].toUpperCase()
-            switch(freq[0]) {
-                case 'LAST':
-                    days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY']
-                    for(day of days) {
-                        if(freq[1] == day) {
+            console.log(freq)
+            if(freq.length == 2) {
+                freq[1] = freq[1].toUpperCase()
+                switch(freq[0]) {
+                    case 'LAST':
+                        days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY']
+                        for(day of days) {
+                            if(freq[1] == day) {
+                                return true
+                            }
+                        }
+                        if(freq[1] == 'Working-Day') {
                             return true
                         }
-                    }
-                    if(freq[1] == 'Working-Day') {
-                        return true
-                    }
-                    return false;
-                case 'DAYS':
-                case 'WEEKS':
-                case 'MONTHS':
-                case 'YEARS':
-                    if(freq[1].isNaN) {
-                        console.log('Failed Freq[1]')
-                        return false
-                    } else {
-                        return true
-                    }
+                        return false;
+                    case 'DAYS':
+                    case 'WEEKS':
+                    case 'MONTHS':
+                    case 'YEARS':
+                        if(freq[1].isNaN) {
+                            console.log('Failed Freq[1]')
+                            return false
+                        } else {
+                            return true
+                        }
+                }
             }
 
             // Return false as never caught
