@@ -131,9 +131,12 @@ function validFrequency(frequency) {
                                 return true
                             }
                         }
-                        if(freq[1] == 'WORKING-DAY') {
-                            return true
+                        if(freq[0] == 'FIRST' || freq[0] == 'LAST') {
+                            if(freq[1] == 'WORKING-DAY') {
+                                return true
+                            }
                         }
+                        console.log('Failed Freq')
                         return false;
                     case 'DAYS':
                     case 'WEEKS':
