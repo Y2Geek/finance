@@ -5,31 +5,26 @@ from datetime import date, datetime
 """ A Script to clean out old payments from Payments.txt """
 
 def get_date(date):
-    """ Returns date set to 5, 6, or 7 """
-    tmp = date.replace(day=7)
+    """ Returns a date object for given date """
+    d = ''
+    try:
+        d = datetime.strptime(date.strip(), '%Y-%m-%d').date()
+        return d
+    except ValueError:
+        print(f'ERROR: {d}')
 
-    if tmp.weekday() == 5:
-        return tmp.replace(day=6)
-    elif tmp.weekday() == 6:
-        return tmp.replace(day=5)
-    
-    return tmp
-
-
+# Path to payments file
 file_path = '/home/paul/.local/share/Cryptomator/mnt/Finance/Payments.txt'
 
 # Get todays date 
 today = datetime.today().date()
 
-# Get 7th of current month and next month
-# Move back if on weekend
-current_month = get_date(today)
-next_month = get_date(add_month(current_month))
+# Get file contents
+file_contents = read_contents(file_path)
 
-if today >= current_month:
-    print(f'\n***** Checking for payments before {next_month} *****\n')
-
-    file_contents = read_contents(file_path)
+# Only continue if file contents exist
+if file_contents:
+    print(f'\n***** Checking for payments before {today} *****\n')
 
     # Split into keep and remove lists
     keep = []
@@ -39,12 +34,12 @@ if today >= current_month:
         data = line.split(';')
 
         if len(data) == 4:
-            if next_month > datetime.strptime(data[1].strip(), '%Y-%m-%d').date():
+            if today > get_date(data[1]):
                 remove.append(line)
             else: 
                 keep.append(line)
         elif len(data) == 7:
-            if next_month > datetime.strptime(data[6].strip(), '%Y-%m-%d').date():
+            if today > get_date(data[6]):
                 remove.append(line)
             else:
                 keep.append(line)
@@ -61,12 +56,10 @@ if today >= current_month:
 
         answer = input(f'\nDelete these {len(remove)} payments? (Y/N):')
 
-        if answer == 'Y':
+        if answer.upper() == 'Y':
             write_list_to_file(file_path, keep)
             print('\n\tFile Cleaned\n')
         else:
             print('\n\tNothing Changed\n')
     else:
         print('\tNothing to remove yet\n')
-else:
-    print('Nothing to do\n')
