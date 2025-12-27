@@ -39,7 +39,7 @@ function getUpcomingOutput(payments,) {
 
     // get the short string for each payment and add to output
     for(let pay of payments) {
-        output += getPayInfo(pay);
+        output += pay.toRow();
     }
 
     return `${output}</table>`;
@@ -57,29 +57,6 @@ function getTotalsOutput(upcoming) {
     return output;
 }
 
-function getPayInfo(pay) {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    let value;
-    let output = "";
-    if(pay.type == 'IN') {
-        // Add blank for extra td
-        value = [pay.value,''];
-    } else {
-        value = ['', pay.value];
-    }
-    let date = pay.date;
-    let info = [days[pay.date.getDay()],
-                pay.date.toLocaleDateString(),
-                pay.name,
-                value[0],
-                value[1]];
-    
-    for(let i = 0; i < info.length; i++) {
-        output += `<td>${info[i]}</td>`;
-    }
-
-    return `${output}</tr>`;
-}
 
 /**
  * A function to send lines with specific number of parts to create a payments
@@ -200,7 +177,7 @@ function getTotals(payments) {
     let debits = [];
 
     for(let pay of payments) {
-        if(pay.type === 'IN') {
+        if(pay.type === 'IN' || pay.type == 'CREDIT') {
             credits.push(pay.value);
         }
         else {

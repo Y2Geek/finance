@@ -34,6 +34,18 @@ class Payment {
     set value(value) {
         this._value = parseFloat(value);
     }
+    toRow() {
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        let tmpVal = []
+
+        if(this._type == 'IN' || this._type == 'CREDIT') {
+            tmpVal = `<td>${this._value}</td><td></td>`
+        } else {
+            tmpVal = `<td></td><td>${this._value}</td>`
+        }
+
+        return `<tr><td>${days[this._date.getDay()]}</td><td>${this.date.toLocaleDateString()}</td><td>${this.name}</td>${tmpVal}</tr>`
+    }
     toString() {
         let date = `${this._date.getFullYear()}-${this._date.getMonth() + 1}-${this._date.getDate()}`;
         return `${this._type};${date};${this._name};${this._value}`;

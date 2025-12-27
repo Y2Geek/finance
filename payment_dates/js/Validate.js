@@ -41,6 +41,8 @@ function validatePaymentData(data) {
  */
 function validType(type) {
     switch(type.toUpperCase()) {
+        case 'CREDIT':
+        case 'DEBIT':
         case 'IN':
         case 'OUT':
             return true;
