@@ -107,8 +107,14 @@ def get_output_for_csv(data):
 				new_contents.append(create_total_row(len(new_contents), total_in, total_out, previous_entry[1]))
 
 		if line_len == 4:
+			while ',' in current[3]:
+				current[3] = current[3].replace(',', '')
+			
 			total_in += round(float(current[3]), 2)
 		else:
+			while ',' in current[4]:
+				current[4] = current[4].replace(',', '')
+
 			total_out += round(float(current[4]), 2)
 		
 		# Create row
