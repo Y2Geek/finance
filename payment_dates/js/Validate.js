@@ -46,10 +46,10 @@ function validType(type) {
         case 'IN':
         case 'OUT':
             return true;
-        default:
-            console.log('Failed Type')
-            return false;
     }
+
+    console.log(`Failed Type ${type}`)
+    return false;
 }
 
 /**
@@ -61,12 +61,12 @@ function validType(type) {
 function validDate(date) {
     let d = new Date(date);
 
-    if(d == 'Invalid Date') {
-        console.log('Failed Date')
-        return false;
-    } else {
+    if(d != 'Invalid Date') {
         return true;
     }
+
+    console.log(`Failed Date ${date}`)
+    return false;
 }
 
 
@@ -80,6 +80,7 @@ function validName(name) {
     if(name.length != 0) {
         return true;
     }
+    console.log('Failed Name, No name given')
     return false;
 }
 
@@ -97,7 +98,7 @@ function validValue(value) {
             return true;
         }
     }
-    console.log('Failed Value')
+    console.log(`Failed Value ${value}`)
     return false;
 }
 
@@ -138,25 +139,22 @@ function validFrequency(frequency) {
                                 return true
                             }
                         }
-                        console.log('Failed Freq')
-                        return false;
+                    break;
                     case 'DAYS':
                     case 'WEEKS':
                     case 'MONTHS':
                     case 'YEARS':
-                        if(freq[1].isNaN) {
-                            console.log('Failed Freq[1]')
-                            return false
-                        } else {
+                        if(!freq[1].isNaN) {
                             return true
                         }
+                    break;
                 }
             }
 
             // Return false as never caught
-            console.log('Failed Freq')
+            console.log(`Failed Freq ${freq}`)
             return false
-        }
+    }
 }
 
 /**
@@ -189,7 +187,7 @@ function validBool(bool) {
         case 'false':
             return true;
         default:
-            console.log(`Failed Bool ${bool} ${typeof(bool)}`)
+            console.log(`Failed Bool ${bool}`)
             return false;
     }
 }
