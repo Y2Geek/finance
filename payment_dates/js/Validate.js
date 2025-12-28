@@ -145,7 +145,10 @@ function validFrequency(frequency) {
                     case 'MONTHS':
                     case 'YEARS':
                         if(!freq[1].isNaN) {
-                            return true
+                            if(!freq[1].includes(',') && !freq[1].includes('.')) {
+                                parseInt(freq[1])
+                                return true;
+                            }
                         }
                     break;
                 }
