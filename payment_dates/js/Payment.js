@@ -29,19 +29,28 @@ class Payment {
         this._name = name;
     }
     get value() {
-        return parseFloat(this._value);
+        return parseFloat(this._value).toFixed(2);
     }
     set value(value) {
-        this._value = parseFloat(value);
+        this._value = parseFloat(value).toFixed(2);
     }
     toRow() {
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         let tmpVal = []
+        // Convert value to string as may need formating 
+        let val = `${this.value}`
+
+        if(val.length >= 10) {
+            val = `${val.slice(0, val.length - 9)},${val.slice(val.length - 9,)}`
+            val = `${val.slice(0, val.length - 6)},${val.slice(val.length - 6,)}`
+        } else if(val.length >= 7) {
+            val = `${val.slice(0, val.length - 6)},${val.slice(val.length - 6,)}`
+        }
 
         if(this._type == 'IN' || this._type == 'CREDIT') {
-            tmpVal = `<td>${this._value}</td><td></td>`
+            tmpVal = `<td>${val}</td><td></td>`
         } else {
-            tmpVal = `<td></td><td>${this._value}</td>`
+            tmpVal = `<td></td><td>${val}</td>`
         }
 
         return `<tr><td>${days[this._date.getDay()]}</td><td>${this.date.toLocaleDateString()}</td><td>${this.name}</td>${tmpVal}</tr>`

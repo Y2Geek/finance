@@ -92,11 +92,10 @@ function validName(name) {
  */
 function validValue(value) {
     // Check value is NOT NaN
+    while(value.includes(',')) {
+        value = value.replace(',', '')
+    }
     if(!Number.isNaN(value)) {
-        // Remvoe commas
-        if(value.includes(',')) {
-            value = value.replace(',', '')
-        }
         // No negative numbers allowed
         if(value >= 0.0) {
             return true;

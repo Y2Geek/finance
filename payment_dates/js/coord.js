@@ -23,6 +23,11 @@ function createPayment(data) {
     // Have data validated before creation
     if(validatePaymentData(data)) {
         data[0] = data[0].toUpperCase()
+
+        // Remove comma if included
+        while(data[3].includes(',')) {
+            data[3] = data[3].replace(',', '')
+        }
         
         switch(data.length) {
             case 4:

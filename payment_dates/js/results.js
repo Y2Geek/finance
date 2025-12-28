@@ -187,9 +187,20 @@ function getTotals(payments) {
 
     let credit = calculateArray('addition', credits, 2);
     let debit = calculateArray('addition', debits, 2);
-    let remaining = toDecimalPlaces(credit - debit);
+    let remaining = addCommas(toDecimalPlaces(credit - debit));
 
-    return [credit, debit, remaining];
+    return [addCommas(credit), addCommas(debit), addCommas(remaining)];
+}
+
+
+function addCommas(val) {
+    if(val.length >= 10) {
+        val = `${val.slice(0, val.length - 9)},${val.slice(val.length - 9,)}`
+        val = `${val.slice(0, val.length - 6)},${val.slice(val.length - 6,)}`
+    } else if(val.length >= 7) {
+        val = `${val.slice(0, val.length - 6)},${val.slice(val.length - 6,)}`
+    }
+    return val
 }
 
 
