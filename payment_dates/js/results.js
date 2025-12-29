@@ -50,9 +50,20 @@ function getTotalsOutput(upcoming) {
 
     // Create the rest of the output
     let totals = getTotals(upcoming);
-    output += `Paid in: £${totals[0]}<br>`;
-    output += `Paid out: £${totals[1]}<br>`;
-    output += `Left: £${totals[2]}</div>`;
+    let cats = ['Paid in: ', 'Paid out:', 'Left: ']
+
+    let index = 0
+
+    while(index < cats.length) {
+        if(totals[index][0] == '-') {
+            totals[index] = `-£${totals[index].slice(1,)}`
+        } else {
+            totals[index] = `£${totals[index].slice(1,)}`
+        }
+
+        output += `${cats[index]} ${totals[index]}<br>`
+        index++
+    }
     
     return output;
 }
@@ -194,11 +205,21 @@ function getTotals(payments) {
 
 
 function addCommas(val) {
+    let minus = false
+    if(val[0] == '-') {
+        val = val.slice(1,)
+        minus = true
+    }
+
     if(val.length >= 10) {
         val = `${val.slice(0, val.length - 9)},${val.slice(val.length - 9,)}`
         val = `${val.slice(0, val.length - 6)},${val.slice(val.length - 6,)}`
     } else if(val.length >= 7) {
+        console.log(val)
         val = `${val.slice(0, val.length - 6)},${val.slice(val.length - 6,)}`
+    }
+    if(minus) {
+        val = '-'.concat(val)
     }
     return val
 }
