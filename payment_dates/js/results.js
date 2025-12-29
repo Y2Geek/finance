@@ -56,9 +56,13 @@ function getTotalsOutput(upcoming) {
 
     while(index < cats.length) {
         if(totals[index][0] == '-') {
-            totals[index] = `-£${totals[index].slice(1,)}`
+            console.log(totals[index])
+            totals[index] = addCommas(totals[index].slice(1,))
+            console.log(totals[index])
+            totals[index] = `-£${totals[index]}`
         } else {
-            totals[index] = `£${totals[index].slice(1,)}`
+            totals[index] = addCommas(totals[index])
+            totals[index] = `£${totals[index]}`
         }
 
         output += `${cats[index]} ${totals[index]}<br>`
@@ -198,28 +202,18 @@ function getTotals(payments) {
 
     let credit = calculateArray('addition', credits, 2);
     let debit = calculateArray('addition', debits, 2);
-    let remaining = addCommas(toDecimalPlaces(credit - debit));
+    let remaining = toDecimalPlaces(credit - debit);
 
-    return [addCommas(credit), addCommas(debit), addCommas(remaining)];
+    return [credit, debit, remaining];
 }
 
 
 function addCommas(val) {
-    let minus = false
-    if(val[0] == '-') {
-        val = val.slice(1,)
-        minus = true
-    }
-
     if(val.length >= 10) {
         val = `${val.slice(0, val.length - 9)},${val.slice(val.length - 9,)}`
         val = `${val.slice(0, val.length - 6)},${val.slice(val.length - 6,)}`
     } else if(val.length >= 7) {
-        console.log(val)
         val = `${val.slice(0, val.length - 6)},${val.slice(val.length - 6,)}`
-    }
-    if(minus) {
-        val = '-'.concat(val)
     }
     return val
 }
