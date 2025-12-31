@@ -53,6 +53,11 @@ def create_csv(file, data):
 
 def create_row(day='', date='', name='', amount_in='', amount_out='', done='X', notes=''):
 	""" Returns a list with given args as elements """
+	if amount_in.startswith('£'):
+		amount_in = amount_in[1:]
+	elif amount_out.startswith('£'):
+		amount_out = amount_out[1:]
+	
 	return [day, date, name, amount_in, amount_out, done, notes]
 
 def get_end_rows(previous, end, if_state, amount_in, amount_out):
@@ -110,12 +115,12 @@ def get_output_for_csv(data):
 			while ',' in current[3]:
 				current[3] = current[3].replace(',', '')
 			
-			total_in += round(float(current[3]), 2)
+			total_in += round(float(current[3][1:]), 2)
 		else:
 			while ',' in current[4]:
 				current[4] = current[4].replace(',', '')
 
-			total_out += round(float(current[4]), 2)
+			total_out += round(float(current[4][1:]), 2)
 		
 		# Create row
 		row = create_row(*current)
