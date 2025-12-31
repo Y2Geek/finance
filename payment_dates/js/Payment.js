@@ -41,9 +41,9 @@ class Payment {
         let val = `${addCommas(this.value)}`
 
         if(this._type == 'IN' || this._type == 'CREDIT') {
-            tmpVal = `<td>${val}</td><td></td>`
+            tmpVal = `<td>£${val}</td><td></td>`
         } else {
-            tmpVal = `<td></td><td>${val}</td>`
+            tmpVal = `<td></td><td>£${val}</td>`
         }
 
         return `<tr><td>${days[this._date.getDay()]}</td><td>${this.date.toLocaleDateString()}</td><td>${this.name}</td>${tmpVal}</tr>`
