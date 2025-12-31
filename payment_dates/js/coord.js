@@ -83,6 +83,18 @@ function showCopyButton() {
 }
 
 
+function addCommas(val) {
+    switch(val.length) {
+        case 10:
+            val = `${val.slice(0, val.length - 9)},${val.slice(val.length - 9,)}`
+        case 7:
+            return `${val.slice(0, val.length - 6)},${val.slice(val.length - 6,)}`
+        default:
+            return `${val}`
+    }
+}
+
+
 /**
  * Gets the start and end date from the Results page
  * @returns Array of Date objects

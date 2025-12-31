@@ -56,9 +56,7 @@ function getTotalsOutput(upcoming) {
 
     while(index < cats.length) {
         if(totals[index][0] == '-') {
-            console.log(totals[index])
             totals[index] = addCommas(totals[index].slice(1,))
-            console.log(totals[index])
             totals[index] = `-£${totals[index]}`
         } else {
             totals[index] = addCommas(totals[index])
@@ -205,17 +203,6 @@ function getTotals(payments) {
     let remaining = toDecimalPlaces(credit - debit);
 
     return [credit, debit, remaining];
-}
-
-
-function addCommas(val) {
-    if(val.length >= 10) {
-        val = `${val.slice(0, val.length - 9)},${val.slice(val.length - 9,)}`
-        val = `${val.slice(0, val.length - 6)},${val.slice(val.length - 6,)}`
-    } else if(val.length >= 7) {
-        val = `${val.slice(0, val.length - 6)},${val.slice(val.length - 6,)}`
-    }
-    return val
 }
 
 
