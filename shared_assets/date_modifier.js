@@ -181,3 +181,71 @@ function setDateOfMonth(date, dayOfMonth) {
 function printDate(date) {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
+
+
+function findNextDay(date, day) {
+    const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+
+    current_day = date.getDay()
+    target_day = days.indexOf(day)
+
+    if(current_day == target_day) {
+        return date
+    } else {
+        if(current_day < target_day) {
+            let days_to_add = target_day - current_day
+            return addDays(date, days_to_add)
+        } else {
+            let days_to_add = (6 - current_day) + target_day + 1
+            return addDays(date, Math.abs(days_to_add))
+        }
+    }
+}
+
+
+function findLastDay(date, day) {
+    const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+
+    current_day = date.getDay()
+    target_day = days.indexOf(day)
+
+    if(current_day == target_day) {
+        return date
+    } else {
+        if(current_day < target_day) {
+            let days_to_remove = current_day - (6 - target_day)
+            return minusDays(date, days_to_remove)
+        } else {
+            let days_to_remove = current_day - target_day
+            return minusDays(date, Math.abs(days_to_remove))
+        }
+    }
+}
+
+
+function findFirstWorkingDay(date) {
+    date = setDateOfMonth(date, 1)
+    current_day = date.getDay()
+
+    if(current_day == 0) {
+        return addDays(date, 1)
+    } else if(current_day == 6) {
+        return addDays(date, 2)
+    }
+
+    return date
+}
+
+
+function findLastWorkingDay(date) {
+    date = setDateOfMonth(date, 31)
+    current_day = date.getDay()
+
+    if(current_day == 0) {
+        return minusDays(date, 2)
+    } else if(current_day == 6) {
+        return minusDays(date, 1)
+    }
+
+    return date
+}

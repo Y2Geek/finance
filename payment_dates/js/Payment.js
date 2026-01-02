@@ -110,7 +110,7 @@ class OngoingPayment extends Payment {
             case 'SECOND':
             case 'THIRD':
             case 'FOURTH':
-                let start_at = 0
+                let start_at = 1
 
                 switch(freq[0]) {
                     case 'FIRST':
@@ -129,62 +129,18 @@ class OngoingPayment extends Payment {
                 tmpDate = setDateOfMonth(tmpDate, start_at)
 
                 if(freq[1] == 'WORKING-DAY') {
-                    // Now set date to the last working day (Mon - Fri)
-                    if(tmpDate.getDay() == 0) {
-                        this.date = addDays(tmpDate, 1)
-                    } else if(tmpDate.getDay() == 6) {
-                        this.date = addDays(tmpDate, 2)
-                    } else {
-                        this.date = tmpDate
-                    }
+                    this.date = findFirstWorkingDay(tmpDate)
                 } else {
-                    // Now compare days to see if they match
-                    let freq_day = days.indexOf(freq[1])
-                    let tmp_day = tmpDate.getDay()
-
-                    if (freq_day == tmp_day) {
-                        this.date = tmpDate
-                    } else {
-                        if(tmp_day < freq_day) {
-                            let days_to_add = freq_day - tmp_day
-                            this.date = addDays(tmpDate, days_to_add)
-                        } else {
-                            let days_to_add = (6 - tmp_day) + freq_day + 1
-                            // console.log(Math.abs(freq_day - tmp_day))
-                            this.date = addDays(tmpDate, Math.abs(days_to_add))
-                        }
-                    }
+                    this.date = findNextDay(tmpDate, freq[1])
                 }
                 break;
             case 'LAST':
                 tmpDate = setDateOfMonth(tmpDate, 31)
 
                 if(freq[1] == 'WORKING-DAY') {
-                    // Now set date to the last working day (Mon - Fri)
-                    if(tmpDate.getDay() == 0) {
-                        this.date = minusDays(tmpDate, 2)
-                    } else if(tmpDate.getDay() == 6) {
-                        this.date = minusDays(tmpDate, 1)
-                    } else {
-                        this.date = tmpDate
-                    }
+                    this.date = findLastWorkingDay(tmpDate)
                 } else {
-                    // Now compare days to see if they match
-                    let freq_day = days.indexOf(freq[1])
-                    let tmp_day = tmpDate.getDay()
-
-                    if (freq_day == tmp_day) {
-                        this.date = tmpDate
-                    } else {
-                        if(tmp_day < freq_day) {
-                            let days_to_remove = Math.abs(0 - tmp_day) + (6 - freq_day) + 1
-                            this.date = minusDays(tmpDate, days_to_remove)
-                        } else {
-                            let days_to_remove = Math.abs(freq_day - tmp_day)
-                            // console.log(Math.abs(freq_day - tmp_day))
-                            this.date = minusDays(tmpDate, Math.abs(days_to_remove))
-                        }
-                    }
+                    this.date = findLastDay(tmpDate, freq[1])
                 }
                 break;
             case 'WEEKDAYS':
