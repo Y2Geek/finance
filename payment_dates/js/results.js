@@ -173,7 +173,7 @@ function getUpcomingPayments(dates, allPayments) {
 function updateDates(payments) {
     for(let pay of payments) {
         if(pay instanceof OngoingPayment) {
-            pay.moveOffWeekend();
+            pay.moveOffWeekendAndPH();
         }
     }
     return payments;

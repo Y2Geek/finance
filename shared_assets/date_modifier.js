@@ -205,6 +205,7 @@ function findNextDay(date, day) {
 
 function findLastDay(date, day) {
     const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+    date = setDateOfMonth(date, 31)
 
     current_day = date.getDay()
     target_day = days.indexOf(day)
@@ -213,10 +214,10 @@ function findLastDay(date, day) {
         return date
     } else {
         if(current_day < target_day) {
-            let days_to_remove = current_day - (6 - target_day)
+            let days_to_remove = Math.abs(current_day - (6 - target_day)) + 1
             return minusDays(date, days_to_remove)
         } else {
-            let days_to_remove = current_day - target_day
+            let days_to_remove = Math.abs(current_day - target_day)
             return minusDays(date, Math.abs(days_to_remove))
         }
     }
@@ -248,4 +249,52 @@ function findLastWorkingDay(date) {
     }
 
     return date
+}
+
+
+function findEaster(Y) {
+    // This code was copied from:
+    // https://stackoverflow.com/questions/1284314/easter-date-in-javascript
+    let C = Math.floor(Y/100);
+    let N = Y - 19*Math.floor(Y/19);
+    let K = Math.floor((C - 17)/25);
+    let I = C - Math.floor(C/4) - Math.floor((C - K)/3) + 19*N + 15;
+    I = I - 30*Math.floor((I/30));
+    I = I - Math.floor(I/28)*(1 - Math.floor(I/28)*Math.floor(29/(I + 1))*Math.floor((21 - N)/11));
+    let J = Y + Math.floor(Y/4) + I + 2 - C + Math.floor(C/4);
+    J = J - 7*Math.floor(J/7);
+    let L = I - J;
+    let M = 3 + Math.floor((L + 40)/44);
+    let D = L + 28 - 31*Math.floor(M/4);
+
+    return new Date(`${Y}-${M}-${D}`);
+}
+
+
+function getPublicHolidays(year) {
+    let easter = findEaster(year)
+    public_holidays = [
+        new Date(`${year + 1}-01-01`), // New Year
+        minusDays(easter, 2), // Good Friday
+        addDays(easter, 1), // Easter Monday
+        findNextDay(new Date(`${year}-05-01`), 'MONDAY'), // May Day
+        findLastDay(new Date(`${year}-05-01`), 'MONDAY'), // Spring bank holiday
+        findLastDay(new Date(`${year}-08-01`), 'MONDAY'), // sUMMER BANK HOLIDAY
+        new Date(`${year}-12-25`), // Christmas Day
+        new Date(`${year}-12-26`) // Boxing day
+    ];
+    return public_holidays
+}
+
+
+function isUkPublicHoliday(date) {
+    let year = date.getFullYear()
+    let public_holidays = getPublicHolidays(year)
+
+    for(let i = 0; i < public_holidays.length; i++){
+        if(public_holidays[i].toLocaleDateString() == date.toLocaleDateString()) {
+            return true
+        }
+    }
+    return false
 }
