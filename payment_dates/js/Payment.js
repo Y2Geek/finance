@@ -174,17 +174,10 @@ class OngoingPayment extends Payment {
     moveOffWeekendAndPH() {
         // Only move if a direct debit
         if(this.autoPayment == true) {
-            if(isUkPublicHoliday(this.date)) {
-                this.date = addDays(this.date, 1)
-            }
             if(this.date.getDay() == 0) {
                 this.date = addDays(this.date, 1);//.toDateString();
             } else if(this.date.getDay() == 6) {
                 this.date = addDays(this.date, 2);//.toDateString();
-            }
-            // Check puublic holiday again as maybe 4 day weekend
-            if(isUkPublicHoliday(this.date)) {
-                this.date = addDays(this.date, 1)
             }
         }
     }
@@ -307,9 +300,6 @@ class UCPayment extends OngoingPayment {
     }
     moveOffWeekendAndPH() {
         // Change date to Friday if date lands on weekend
-        if(isUkPublicHoliday(this.date)) {
-            this.date = minusDays(this.date, 1)
-        }
         switch(this.date.getDay()) {
             case 0:
                 this._date = minusDays(this._date, 2);
@@ -317,9 +307,6 @@ class UCPayment extends OngoingPayment {
             case 6:
                 this._date = minusDays(this._date, 1);
                 break;
-        }
-        if(isUkPublicHoliday(this.date)) {
-            this.date = minusDays(this.date, 1)
         }
     }
     toString() {
