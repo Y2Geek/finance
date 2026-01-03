@@ -10,6 +10,9 @@ img {
     width: 15%;
     height: auto;
 }
+li {
+    list-style: none;
+}
 form {
     background-color: #ffffff;
     margin-top: -5%;
@@ -63,6 +66,15 @@ td:nth-child(3) {
     background-color: #FF0000;
     color: #FFFFFF;
     font-size: 1.5em;
+}
+#ph {
+    background-color: darkblue;
+    color: #FFFFFF;
+    font-size: 1.5em;
+}
+#screenReaderMessage {
+    color: transparent;
+    font-size: xx-small;
 }
 .hide {
     display: none;

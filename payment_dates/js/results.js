@@ -6,6 +6,15 @@ function getResultsOutput(fileContents, dates) {
     if(allPayments != undefined) {
         if(allPayments[1].length != 0) {
             output += getBPaymentError(allPayments[1]);
+        } else {
+            let phMsg = getPublicHolMessage()
+
+            if(phMsg != '') {
+                setScreenReaderMessage('There is a message regarding public/bank holidays underneath the copy to clipboard message')
+                output += phMsg
+            } else {
+                setScreenReaderMessage()
+            }
         }
 
         // Now get upcoming payments
@@ -23,8 +32,18 @@ function getResultsOutput(fileContents, dates) {
     }
 }
 
+function setScreenReaderMessage(msg = '') {
+    let sra = document.getElementById('screenReaderMessage')
+    if(msg) {
+        sra.innerHTML = msg
+    } else {
+        sra.innerHTML = '<br>'
+    }
+}
+
 function getBPaymentError(broken) {
     let msg = "<div id='warning'>Warning:<br><br>The following payments have not been included as they contain errors<br><br>";
+    setScreenReaderMessage('There is an error message underneath the copy to clipboard button')
 
     // Add each payment
     for(let pay of broken) {
@@ -34,12 +53,67 @@ function getBPaymentError(broken) {
     return `${msg}</div>`;
 }
 
-function getUpcomingOutput(payments,) {
-    let output = `<table><tr><th>Day</th><th>Date</th><th>Name</th><th>In</th><th>Out</th></tr>`;
+function getPublicHolMessage() {
+    let dates = getDates()
+    let hols = []
+    let upcomingHols = []
+    let year1 = dates[0].getFullYear()
+    let year2 = dates[1].getFullYear()
+
+    if(year1 == year2) {
+        hols = getPublicHolidays(year1)
+    } else {
+        hols = getPublicHolidays(year1)
+        hols = hols.concat(getPublicHolidays(year2))
+    }
+    console.log(hols.length)
+    for(let hol of hols){
+        let iso = hol.toISOString()
+        if(iso >= dates[0].toISOString()) {
+            // Now ensure its before the end date
+            if(iso < dates[1].toISOString()) {
+                upcomingHols.push(hol)
+            }
+        }
+    }
+
+    if(upcomingHols.length != 0) {
+        let msg = '<div id="ph"><h2>Public Holidays</h2>'
+        
+        // Set message based on length of upcoming hols
+        if(upcomingHols.length == 1) {
+            msg += 'The following date is a '
+        } else {
+            msg += 'The following dates are '
+        }
+
+        msg += 'bank/public holiday, and may affect direct debits and standing orders: <br><ul>'
+
+        for(let hol of upcomingHols) {
+            msg += `<li>${hol.toDateString()}</li>`
+        }
+
+        return `${msg}</ul><br></div>`
+    }
+    return ''
+}
+
+function getUpcomingOutput(payments) {
+    let output = `<table><tr><th>Day</th><th>Date</th><th>Name</th><th>In</th><th>Out</th><th>Balance</th></tr>`;
+    let prevDate = ''
 
     // get the short string for each payment and add to output
-    for(let pay of payments) {
+    for(let i = 0; i < payments.length; i++) {
+        let pay = payments[i]
+
+        if(prevDate != '') {
+            if(pay.date.toLocaleDateString() != prevDate.toLocaleDateString()) {
+                let totals = getTotals(payments.slice(0,i))
+                output += `<tr><td></td><td></td><td></td><td></td><td></td><td>${totals[2]}</td>`
+            }
+        }
         output += pay.toRow();
+        prevDate = pay.date;
     }
 
     return `${output}</table>`;

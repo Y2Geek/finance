@@ -46,7 +46,7 @@ class Payment {
             tmpVal = `<td></td><td>£${val}</td>`
         }
 
-        return `<tr><td>${days[this._date.getDay()]}</td><td>${this.date.toLocaleDateString()}</td><td>${this.name}</td>${tmpVal}</tr>`
+        return `<tr><td>${days[this._date.getDay()]}</td><td>${this.date.toLocaleDateString()}</td><td>${this.name}</td>${tmpVal}<td></td></tr>`
     }
     toString() {
         let date = `${this._date.getFullYear()}-${this._date.getMonth() + 1}-${this._date.getDate()}`;
@@ -82,7 +82,7 @@ class OngoingPayment extends Payment {
     moveDateAheadTo(date) {
         const dayOfMonth = this._date.getDate();
 
-        while(this._date < date) {
+        while(this._date.toISOString() < date.toISOString()) {
             this.moveDateAhead();
         }
 

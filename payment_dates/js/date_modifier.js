@@ -274,14 +274,14 @@ function findEaster(Y) {
 function getPublicHolidays(year) {
     let easter = findEaster(year)
     public_holidays = [
-        new Date(`${year + 1}-01-01`), // New Year
         minusDays(easter, 2), // Good Friday
         addDays(easter, 1), // Easter Monday
         findNextDay(new Date(`${year}-05-01`), 'MONDAY'), // May Day
         findLastDay(new Date(`${year}-05-01`), 'MONDAY'), // Spring bank holiday
         findLastDay(new Date(`${year}-08-01`), 'MONDAY'), // sUMMER BANK HOLIDAY
         new Date(`${year}-12-25`), // Christmas Day
-        new Date(`${year}-12-26`) // Boxing day
+        new Date(`${year}-12-26`), // Boxing day
+        new Date(`${year + 1}-01-01`), // New Year
     ];
     return public_holidays
 }
