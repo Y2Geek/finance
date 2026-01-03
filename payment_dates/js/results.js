@@ -66,7 +66,7 @@ function getPublicHolMessage() {
         hols = getPublicHolidays(year1)
         hols = hols.concat(getPublicHolidays(year2))
     }
-    console.log(hols.length)
+    
     for(let hol of hols){
         let iso = hol.toISOString()
         if(iso >= dates[0].toISOString()) {
@@ -109,7 +109,15 @@ function getUpcomingOutput(payments) {
         if(prevDate != '') {
             if(pay.date.toLocaleDateString() != prevDate.toLocaleDateString()) {
                 let totals = getTotals(payments.slice(0,i))
-                output += `<tr><td></td><td></td><td></td><td></td><td></td><td>${totals[2]}</td>`
+                totals = addCommas(totals[2])
+
+                if(totals < 0) {
+                    totals = `-£${Math.abs(totals)}`
+                } else {
+                    totals = `£${totals}`
+                }
+
+                output += `<tr><td></td><td></td><td></td><td></td><td></td><td>${totals}</td>`
             }
         }
         output += pay.toRow();
