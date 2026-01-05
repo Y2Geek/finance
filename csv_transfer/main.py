@@ -19,7 +19,12 @@ def get_file_content(file):
 	
 	if contents != None:
 		for line in contents:
-			content_lists.append(line.split('\t'))
+			data = line.split('\t')
+			if ((len(data) >= 4 and len(data) <= 6) or
+			(len(data) == 1 and data[0].startswith('£')) or
+			len(data) == 1 and data[0].startswith('Left:')):
+				# Only keep usable data
+				content_lists.append(data)
 	
 	return content_lists
 
@@ -27,12 +32,21 @@ def update_value(entry, index):
 	""" Set amount_in and amouint_out to the same value"""
 	if entry[3] == '':
 		entry[3] = f'=e{index}'
-	else:
+	elif entry[4] == '':
 		entry[4] = f'=d{index}'
 	
 	entry[5] = ''
 
 	return entry
+
+def update_formula(formula):
+	""" Updates the current formula for complete payments """
+	# Split formula at the ':'
+	tmp = formula.split(':')
+	# get the numbers only
+	tmp1 = tmp[1][1:-1]
+	# Return new formula
+	return f'{tmp[0]}:{tmp[1][0]}{int(tmp1) + 1})'
 
 def get_formula(end, if_state = False):
 	''' Returns a formula to subtract the D colum from the E colum '''
@@ -43,14 +57,6 @@ def get_formula(end, if_state = False):
 	
 	return formula
 
-def create_csv(file, data):
-	""" Creates a csv file with an ods extension """
-	file_name = f'{file[:-4]}.ods'
-	with open(file_name, 'w') as csv_file:
-		writer = csv.writer(csv_file)
-		for line in data:
-			writer.writerow(line)
-
 def create_row(day='', date='', name='', amount_in='', amount_out='', done='X', notes=''):
 	""" Returns a list with given args as elements """
 	if amount_in.startswith('£'):
@@ -60,112 +66,120 @@ def create_row(day='', date='', name='', amount_in='', amount_out='', done='X', 
 	
 	return [day, date, name, amount_in, amount_out, done, notes]
 
-def get_end_rows(previous, end, if_state, amount_in, amount_out):
-	""" Creates the savings, and total row """
-	rows = []
-	rows.append(create_savings_row(previous[0], previous[1], get_formula(end, if_state)))
-	rows.append(create_total_row(end + 1, amount_in, amount_out, previous[1]))
-
-	return rows
+def create_comp_row(day, date, name, amount_in = '', amount_out = ''):
+	""" Create new row with given data, adding -Complete to name """
+	return create_row(day, date, f"{name}-(Complete)", amount_in, amount_out)
 
 def create_savings_row(day, date, amount=0.0):
 	""" Returns a list with given args and empty elements for rest of row """
 	return create_row(day=day, date=date, name="Savings", amount_out=amount)
 
-def create_total_row(end, amount_in, amount_out, date):
+def create_total_row(end, total='', date=''):
 	""" Returns a list with formula and est_total. blank elements for rest of row """
-	total = round(amount_in - amount_out, 2)
-
-	if total < 0.0:
-		print(f'\t\t{date} - BALANCE WARNING! ({total})')
-
+	if total.startswith('Left: '):
+		total = total[6:]
+	
+	if total.startswith('-'):
+		total = f'{total[0]}{total[2:]}'
+		print(f'\tBalance warning {date} {total}')
+	else:
+		total = total[1:]
 	return create_row(done=get_formula(end), notes=total)
 
-def create_comp_row(day, date, name, amount_in = '', amount_out = ''):
-	""" Create new row with given data, adding -Complete to name """
-	return create_row(day, date, f"{name}-(Complete)", amount_in, amount_out)
+def get_end_rows(previous, end, if_state):
+	""" Creates the savings, and total row """
+	rows = []
+	rows.append(create_savings_row(previous[0], previous[1], get_formula(end, if_state)))
+	rows.append(create_total_row(end + 1))
+
+	return rows
 
 def get_output_for_csv(data):
 	""" Returns a list of content to be added to CSV file """
-	# Create lis and add header 
-	new_contents = [create_row(*file_contents[0], 'Done', 'Notes'),[]]
+	# Create list and add header 
+	new_contents = [create_row(*file_contents[0][0:5], 'Done', 'Notes'),[]]
+	previous_entry = ''
 
-	# Running totals
-	total_in = 0.0
-	total_out = 0.0
-
+	# Now create rest of rows
 	index = 1
 	while index < len(data):
 		current = data[index]
 		line_len = len(current)
-		previous_entry = data[index - 1]
+		row = ''
 
-		# Old expression (kept as backup)
-		# line_len == 4 and len(previous_entry) == 5
-		
-		# Stop if current line length is above 5, or less than  4
-		if line_len < 4 or line_len > 5:
-			new_contents = new_contents + get_end_rows(previous_entry, len(new_contents), True, total_in, total_out)
-			break
-		elif data[index][1] != previous_entry[1]:
-			if len(new_contents) != 2:
-				new_contents.append(create_total_row(len(new_contents), total_in, total_out, previous_entry[1]))
+		if line_len == 4 or line_len == 5:
+			current_name = current[2].split(' ')
+			row = create_row(*current)
 
-		if line_len == 4:
-			while ',' in current[3]:
-				current[3] = current[3].replace(',', '')
+			# We need previous entry to have something, as used for comparison
+			if previous_entry == '':
+				new_contents.append(row)
+			else:
+				previous_name = previous_entry[2].split(' ')
+
+				# Lets see if the names start the same
+				if current_name[0] not in ignore_list:
+					if previous_name[0].startswith(current_name[0]) and 'Complete' not in previous_name[0]:
+						update_value(new_contents[-1], len(new_contents))
+						new_contents.append(update_value(row, len(new_contents) + 1))
+
+						# Check if payment in or payment out
+						if current[3] == '':
+							new_contents.append(create_comp_row(row[0], row[1], current_name[0], amount_out=f'=sum(d{len(new_contents) - 1}:d{len(new_contents)})'))
+						else:
+							new_contents.append(create_comp_row(row[0], row[1], current_name[0], amount_in=f'=sum(e{len(new_contents) - 1}:e{len(new_contents)})'))
+					elif previous_name[0].startswith(current_name[0]) and 'Complete' in previous_name[0]:
+						type = ''
+
+						if current[3] == '':
+							type = 'OUT'
+						else:
+							type = 'IN'
+						
+						new_contents.insert(-1, update_value(row, len(new_contents) - 1))
+						
+						# Now time to modify the formula
+						tmp = ''
+
+						if type == 'IN':
+							# get current formula of complete payment
+							tmp = new_contents[-1][3]
+							
+							# Replace formula
+							new_contents[-1][3] = update_formula(tmp)
+						else:
+							# get current formula of complete payment
+							tmp = new_contents[-1][4]
+							
+							# Replace formula
+							new_contents[-1][4] = update_formula(tmp)
+
+					else:
+						new_contents.append(row)
+				else:
+					# In ignore list
+					new_contents.append(row)
+		elif line_len == 1:
+			# Remove testing 
+			# current[0] = ' '
+			row = create_total_row(len(new_contents), current[0], new_contents[-1][1])
+			new_contents.append(row)
 			
-			total_in += round(float(current[3][1:]), 2)
-		else:
-			while ',' in current[4]:
-				current[4] = current[4].replace(',', '')
-
-			total_out += round(float(current[4][1:]), 2)
-		
-		# Create row
-		row = create_row(*current)
-
-		# Lets see if previous starts with the same name as line
-		previous_name = previous_entry[2].split(' ')
-		current_name = current[2].split(' ')
-
-		if current_name[0] not in ignore_list and (current[2].startswith(previous_name[0]) and current[1] == previous_entry[1]):
-			# Keep track of type of payment for complete 
-			type_of_payment = ''
-
-			if row[3] == '':
-				type_of_payment = 'OUT'
-			else:
-				type_of_payment = 'IN'
-
-			if new_contents[-1][2].endswith('(Complete)') == False:
-				new_contents[-1] = update_value(new_contents[-1], len(new_contents))
-				new_contents.append(update_value(row, len(new_contents) + 1))
-				
-				formula = f'=sum(d{len(new_contents) - 1}:d{len(new_contents)})'
-
-				if type_of_payment == 'IN':
-					new_contents.append(create_comp_row(previous_entry[0], previous_entry[1], previous_name[0], amount_in = formula))
-				else:
-					new_contents.append(create_comp_row(previous_entry[0], previous_entry[1], previous_name[0], amount_out = formula))
-
-			else:
-				index_of_d = formula.find('d')
-				end_index = formula.find(':')
-				formula = f'=sum({formula[index_of_d:end_index]}:d{len(new_contents)})'
-				new_contents.insert(-1, update_value(row, len(new_contents)))
-				
-				# Update completes formula
-				if type_of_payment == 'IN':
-					new_contents[-1][3] = formula
-				else:
-					new_contents[-1][4] = formula
-		else:
-			new_contents.append(create_row(*data[index]))
-
+		previous_entry = new_contents[-1]
 		index += 1
 	
+	# Add final rows (withdrawn)
+	# new_contents += get_end_rows(new_contents[-1], len(new_contents), get_formula(len(new_contents), True))
+
 	return new_contents
+
+def create_csv(file, data):
+	""" Creates a csv file with an ods extension """
+	file_name = f'{file[:-4]}.ods'
+	with open(file_name, 'w') as csv_file:
+		writer = csv.writer(csv_file)
+		for line in data:
+			writer.writerow(line)
 
 files = get_files()
 
