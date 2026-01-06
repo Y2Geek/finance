@@ -136,7 +136,7 @@ def get_output_for_csv(data):
 						else:
 							type = 'IN'
 						
-						new_contents.insert(-1, update_value(row, len(new_contents) - 1))
+						new_contents.insert(-1, update_value(row, len(new_contents)))
 						
 						# Now time to modify the formula
 						tmp = ''
